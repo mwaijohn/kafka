@@ -21,10 +21,19 @@ public class KafkaApplication {
 	@Autowired
 	KafkaTemplate<String,String> kafkaTemplate;
 
+	@Autowired
+	KafkaTemplate<String, User> userKafkaTemplate;
+
 	public static void main(String[] args) {
 		SpringApplication.run(KafkaApplication.class, args);
 	}
 
+	@GetMapping("/user")
+	public void sendUserMessage(){
+		User user = new User("John Mwai","Kenyan");
+		userKafkaTemplate.send("user",user);
+		return;
+	}
 	@GetMapping("/send")
 	public void sendMessage(){
 		kafkaTemplate.send("topic1","Message: " + new Date());
